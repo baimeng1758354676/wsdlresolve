@@ -60,10 +60,12 @@ public class DOMUtil {
             serialize(node.getChildNodes(), format, writer);
         } else {
             serialize(new NodeList() {
+                @Override
                 public Node item(int index) {
                     return node;
                 }
 
+                @Override
                 public int getLength() {
                     return 1;
                 }

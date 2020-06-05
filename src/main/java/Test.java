@@ -22,14 +22,14 @@ public class Test {
         String wsdluri = "wsdl/queryInfo.wsdl";
         WSDLReader wsdlReader = WAWsdlUtil.getWsdlReader();
         Definition definition = wsdlReader.readWSDL(wsdluri);
-        Map services = definition.getServices();
+//        Map services = definition.getServices();
 
-        Object[] objects = services.values().toArray();
-        ServiceImpl service = (ServiceImpl) objects[0];
-        Object[] portList =  service.getPorts().values().toArray();
-        PortImpl port = (PortImpl) portList[0];
-        SOAPAddressImpl address = (SOAPAddressImpl) port.getExtensibilityElements().get(0);
-        String locationURI = address.getLocationURI();
+//        Object[] objects = services.values().toArray();
+//        ServiceImpl service = (ServiceImpl) objects[0];
+//        Object[] portList =  service.getPorts().values().toArray();
+//        PortImpl port = (PortImpl) portList[0];
+//        SOAPAddressImpl address = (SOAPAddressImpl) port.getExtensibilityElements().get(0);
+//        String locationURI = address.getLocationURI();
 //        services.values().stream().forEach(t->{
 //            ServiceImpl service = (ServiceImpl) t;
 //            service.getPorts().values().stream().forEach(k->{
@@ -51,26 +51,22 @@ public class Test {
         XmlCursor cursor = object.newCursor();
         XmlCursor.TokenType tokenType = cursor.toNextToken();
         cursor.beginElement( SoapVersion11.envelopeQName);
-        cursor.toChild(0);
         cursor.beginElement(SoapVersion11.bodyQName);
         cursor.toParent();
-        cursor.toChild(1);
         cursor.beginElement(SoapVersion11.headerQName);
-        System.out.println(object);
-        XmlCursor.TokenType tokenType9 = cursor.currentTokenType();
+        XmlCursor.TokenType tokenType1 = cursor.toNextToken();
         XmlCursor.TokenType tokenType3 = cursor.toNextToken();
-        XmlCursor.TokenType tokenType7 = cursor.toNextToken();
-        XmlCursor.TokenType tokenType1 = cursor.currentTokenType();
+
 
         List<ParameterInfo> parameterInfos = WAWsdlUtil.getMethodParams(wsdluri, "queryCarInfomation");
 
-        merge(parameterInfos, object, cursor);
+        merge(parameterInfos, cursor);
 
         System.out.println(object);
 
     }
 
-    private static void merge(List<ParameterInfo> parameterInfos, XmlObject object, XmlCursor cursor) {
+    private static void merge(List<ParameterInfo> parameterInfos, XmlCursor cursor) {
         if (parameterInfos == null || parameterInfos.isEmpty()) {
             return;
         }
@@ -79,7 +75,7 @@ public class Test {
             ParameterInfo parameterInfo = parameterInfos.get(i);
             cursor.insertElementWithText(parameterInfo.getName(), parameterInfo.getValue());
             XmlCursor.TokenType tokenType = cursor.toPrevToken();
-            merge(parameterInfo.getChildren(), object, cursor);
+            merge(parameterInfo.getChildren(), cursor);
             cursor.toParent();
         }
     }
