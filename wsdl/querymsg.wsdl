@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://service.server.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="BaseicQueryService" targetNamespace="http://service.server.com/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://service.server.com/" elementFormDefault="unqualified" targetNamespace="http://service.server.com/" version="1.0">
+
+  <xs:element name="HIPMessageServer" type="tns:HIPMessageServer"/>
+
+  <xs:element name="HIPMessageServerResponse" type="tns:HIPMessageServerResponse"/>
+
+  <xs:complexType name="HIPMessageServer">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="action" type="xs:string"/>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="HIPMessageServerResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="HIPMessageServer">
+    <wsdl:part element="tns:HIPMessageServer" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="HIPMessageServerResponse">
+    <wsdl:part element="tns:HIPMessageServerResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="BaseicQuery">
+    <wsdl:operation name="HIPMessageServer">
+      <wsdl:input message="tns:HIPMessageServer" name="HIPMessageServer">
+    </wsdl:input>
+      <wsdl:output message="tns:HIPMessageServerResponse" name="HIPMessageServerResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BaseicQueryServiceSoapBinding" type="tns:BaseicQuery">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="HIPMessageServer">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="HIPMessageServer">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="HIPMessageServerResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="BaseicQueryService">
+    <wsdl:port binding="tns:BaseicQueryServiceSoapBinding" name="BaseicQueryPort">
+      <soap:address location="http://localhost:10000/ClassName"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

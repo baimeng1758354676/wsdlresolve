@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<o>
+    <domain type="string">https://www.sojson.com/simple_json_beta.html</domain>
+    <keywords type="string">json在线解析</keywords>
+    <title type="string">json在线解析（简版） - soJSON在线解析</title>
+    <功能 class="array">
+        <e type="string">JSON美化</e>
+        <e type="string">JSON数据类型显示</e>
+        <e type="string">JSON数组显示角标</e>
+        <e type="string">高亮显示</e>
+        <e type="string">错误提示</e>
+        <e class="array">
+            <e class="array">
+                <e type="string">www.sojson.com</e>
+                <e type="string">json.sojson.com</e>
+            </e>
+        </e>
+    </功能>
+    <加入我们 class="object">
+        <qq群 type="string">259217951</qq群>
+    </加入我们>
+</o>
