@@ -3,13 +3,21 @@ import com.ibm.wsdl.ServiceImpl;
 import com.ibm.wsdl.extensions.soap.SOAPAddressImpl;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.tree.DefaultElement;
+import org.w3c.dom.*;
 
 import javax.wsdl.Definition;
 import javax.wsdl.WSDLException;
 import javax.wsdl.xml.WSDLReader;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,17 +26,43 @@ import java.util.Map;
  * Created by wangleai on 2018/3/1.
  */
 public class Test {
-    public static void main(String[] args) throws WSDLException {
-        String wsdluri = "wsdl/queryInfo.wsdl";
+    public static void main(String[] args) throws WSDLException, TransformerException {
+        String wsdluri = "http://172.16.20.166/soap/JHIPLIB.SOAP.BS.HL7V3Service.cls?wsdl";
         WSDLReader wsdlReader = WAWsdlUtil.getWsdlReader();
         Definition definition = wsdlReader.readWSDL(wsdluri);
+//        Element documentationElement = definition.getDocumentationElement();
+//        NodeList soap = documentationElement.getElementsByTagName("soap");
+//        System.out.println(definition);
+        Document definitionDocument = WAWsdlUtil.getDefinitionDocument(wsdluri);
+        TransformerFactory tf = TransformerFactory.newInstance();
+        Transformer transformer = tf.newTransformer();
+        DOMSource source = new DOMSource(definitionDocument);
+        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        StringWriter writer = new StringWriter();
+        StreamResult result = new StreamResult(writer);
+        transformer.transform(source, result);
+        String output = writer.getBuffer().toString();
+        try {
+            org.dom4j.Document daf = DocumentHelper.parseText(output);
+            org.dom4j.Element rootElement = daf.getRootElement();
+            org.dom4j.Element element = rootElement.element("binding").element("operation");
+            String soapAction = ((DefaultElement) element.content().get(1)).attribute("soapAction").getValue();
+            System.out.println(soapAction);
+//            ((DefaultElement) ((ArrayList) ((DefaultElement) element).content).get(1)).attribute(0).getValue()
+            System.out.println(1);
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+        NodeList soap = definitionDocument.getElementsByTagName("soap");
+
 //        Map services = definition.getServices();
 
 //        Object[] objects = services.values().toArray();
 //        ServiceImpl service = (ServiceImpl) objects[0];
 //        Object[] portList =  service.getPorts().values().toArray();
 //        PortImpl port = (PortImpl) portList[0];
-//        SOAPAddressImpl address = (SOAPAddressImpl) port.getExtensibilityElements().get(0);
+//        SOAPAddressImpl address = (SOsoAPAddressImpl) port.getExtensibilityElements().get(0);
 //        String locationURI = address.getLocationURI();
 //        services.values().stream().forEach(t->{
 //            ServiceImpl service = (ServiceImpl) t;

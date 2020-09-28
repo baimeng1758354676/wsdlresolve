@@ -49,6 +49,7 @@ public class WAWsdlUtil {
         if (wsdlFactory == null) {
             wsdlFactory = WSDLFactory.newInstance();
         }
+
         return wsdlFactory;
     }
 
